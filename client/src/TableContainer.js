@@ -67,7 +67,7 @@ function TableContainer({data}) {
       []
     )
   
-    // const data = React.useMemo(() => makeData(20), [])
+     const dataSet = React.useMemo(() => data, [])
 /*     const data = [
         {
             firstname: "John",
@@ -89,7 +89,7 @@ function TableContainer({data}) {
   
     return (
       <Styles>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={dataSet} />
       </Styles>
     )
   }

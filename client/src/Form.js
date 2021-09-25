@@ -133,7 +133,7 @@ function Form({ token }) {
         <label htmlFor="ssn">ssn</label>
         <input
           id="4"
-          placeholder="333-22-4444"
+          placeholder="xxx-xx-xxxx"
           {...register("ssn", { required: true })}
           onChange={handleFormValidation}
         />
