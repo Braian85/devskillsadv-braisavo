@@ -28,5 +28,8 @@
   },
   "devDependencies": {
     "morgan": "^1.10.0"
-  }
+  },
+  "extends": [
+    "plugin:react-hooks/recommended"
+  ]
 }
