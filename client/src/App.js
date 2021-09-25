@@ -100,20 +100,20 @@ function App() {
        
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Coding Challenge</h1>
-      <label htmlFor="firstName"></label>
-      <input placeholder="First Name" {...register("firstName", { required: true })} />
+      <label htmlFor="firstName">First Name</label>
+      <input placeholder="John" {...register("firstName", { required: true })} />
       {errors.firstName && <span style={{ color: "red" }}>This field is required</span>}
 
-      <label htmlFor="lastName"></label>
-      <input placeholder="Last Name" {...register("lastName", { required: true })} />
+      <label htmlFor="lastName">Last Name</label>
+      <input placeholder="Doe" {...register("lastName", { required: true })} />
       {errors.lastName && <span style={{ color: "red" }}>This field is required</span>}
 
-      <label htmlFor="address"></label>
-      <input placeholder="Address" {...register("address", { required: true })} />
+      <label htmlFor="address">Address</label>
+      <input placeholder="Mulholland Drive 23" {...register("address", { required: true })} />
       {errors.address && <span style={{ color: "red" }}>This field is required</span>}
 
-      <label htmlFor="ssn"></label>
-      <input placeholder="SSN" {...register("ssn", { required: true })} />
+      <label htmlFor="ssn"  >ssn</label>
+      <input placeholder="333-22-4444" pattern="^\d{3}-\d{2}-\d{4}$" {...register("ssn", { required: true })} />
       {errors.ssn && <span style={{ color: "red" }}>This field is required</span>}
 
       {recordInserted? <span style={{color: "#00ff43"}}>record inserted successfully.</span> : null}
