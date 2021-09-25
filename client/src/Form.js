@@ -11,8 +11,6 @@ function Form({ token }) {
     address: 0,
     ssn: 0,
   });
-  console.log("token", token);
-  console.log("validation: ", validation);
 
   const popInsertedRecordMessage = () => {
     setRecordInserted(true);
@@ -26,12 +24,9 @@ function Form({ token }) {
     handleSubmit,
     formState: { errors },
     reset,
-    formState,
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("data: ", data);
-
     const url = "http://localhost:8081/api/members";
     let config = {
       headers: {
@@ -44,9 +39,6 @@ function Form({ token }) {
       .then(() => popInsertedRecordMessage())
       .catch((err) => console.log("post error: ", err))
       .finally(() => {
-        console.log("url: ", url);
-        console.log("data: ", data);
-        console.log("config", config);
         reset();
       });
   };
@@ -61,18 +53,16 @@ function Form({ token }) {
     let regEx = null;
     switch (e.target.id) {
       case "1":
-        regEx = /\w\w+/gi;
+        regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
-          console.log("validate First Name");
           setValidation({ ...validation, firstname: 1 });
         } else {
           setValidation({ ...validation, firstname: 0 });
         }
         break;
       case "2":
-        regEx = /\w\w+/gi; //two or more word characters
+        regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
-          console.log("validate Lastname Name");
           setValidation({ ...validation, lastname: 1 });
         } else {
           setValidation({ ...validation, lastname: 0 });
@@ -80,18 +70,16 @@ function Form({ token }) {
         break;
 
       case "3":
-        regEx = /\w\w+/gi; //two or more word characters
+        regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
-          console.log("validate Address");
           setValidation({ ...validation, address: 1 });
         } else {
           setValidation({ ...validation, address: 0 });
         }
         break;
       case "4":
-        regEx = /^\d{3}-\d{2}-\d{4}$/;
+        regEx = /^\d{3}-\d{2}-\d{4}$/; //ssn format validation.
         if (regEx.test(e.target.value)) {
-          console.log("validate SSN");
           setValidation({ ...validation, ssn: 1 });
         } else {
           setValidation({ ...validation, ssn: 0 });
@@ -103,7 +91,7 @@ function Form({ token }) {
         break;
     }
   };
- 
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -119,7 +107,7 @@ function Form({ token }) {
         {errors.firstName && (
           <span style={{ color: "red" }}>This field is required</span>
         )}
-       
+
         <label htmlFor="lastName">Last Name</label>
         <input
           id="2"
@@ -144,9 +132,8 @@ function Form({ token }) {
 
         <label htmlFor="ssn">ssn</label>
         <input
-        id = "4"
+          id="4"
           placeholder="333-22-4444"
-          
           {...register("ssn", { required: true })}
           onChange={handleFormValidation}
         />
@@ -172,7 +159,10 @@ function Form({ token }) {
             type="submit"
             value="SAVE"
             disabled={
-              validation.firstname === 1 && validation.lastname === 1 && validation.address === 1 && validation.ssn === 1
+              validation.firstname === 1 &&
+              validation.lastname === 1 &&
+              validation.address === 1 &&
+              validation.ssn === 1
                 ? false
                 : true
             }

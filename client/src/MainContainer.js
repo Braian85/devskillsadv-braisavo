@@ -9,8 +9,6 @@ export default function Maincontainer() {
   const [token, setToken] = useState({});
   const [data, setData] = useState([]);
 
-  console.log("Main Container");
-
   //Token authentication and data request.
   useEffect(() => {
     axios
