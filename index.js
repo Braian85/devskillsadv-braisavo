@@ -5,8 +5,9 @@ const rjwt = require('restify-jwt-community');
 const jwt = require('jsonwebtoken');
 const config = require('./config');
 const user = require('./lib/user');
-const err = require('restify-errors')
-const server = Restify.createServer()
+const err = require('restify-errors');
+const server = Restify.createServer();
+const morgan = require('morgan');
 
 const corsMiddleware = require('restify-cors-middleware')
 const cors = corsMiddleware({
@@ -17,6 +18,8 @@ const cors = corsMiddleware({
 
 server.pre(cors.preflight)
 server.use(cors.actual)
+
+server.use(morgan('short'));
 
 server.use(Restify.plugins.queryParser())
 server.use(Restify.plugins.bodyParser({ mapParams: false }))

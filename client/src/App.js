@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-
-
 import "./styles.css";
 
 function App() {
   const [token, setToken] = useState({});
+  const [recordInserted, setRecordInserted] = useState(false);
+  console.log("state token: ", token)
 
-  console.log("token:", token);
+  const popInsertedRecordMessage = () => {
+    setRecordInserted(true);
+    setTimeout(() => {
+      setRecordInserted(false);
+    }, 1000);
+
+  } 
+    
+
   const {
     register,
     handleSubmit,
@@ -17,16 +24,31 @@ function App() {
     reset,
   } = useForm();
 
-  const onSubmit = async () => {
-    await axios
-      .post("http://localhost:8081/auth", {
-        username: "sarah",
-        password: "connor",
-      })
-      .then((res) => {
-        // console.log(res);
-        setToken(res.data.token);
-      });
+  const onSubmit = async (data) => {
+
+    console.log("data: ", data);
+    console.log("token: ", token);
+
+    const url = 'http://localhost:8081/api/members'; 
+    let config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+
+    }
+    await axios.post(url, data, config)
+    .then((res) => console.log(res))
+    .then(() => popInsertedRecordMessage())
+    .catch((err) => console.log("post error: ", err))
+    .finally(() => {
+      console.log("url: ", url);
+      console.log("data: ", data);
+      console.log("config", config);
+      reset()
+      
+    })
+
+      
   };
 
   useEffect(() => {
@@ -51,20 +73,23 @@ function App() {
         axios
           .get("http://localhost:8081/api/members", config)
           .then((response) => {
-            console.log(response);
+            console.log(response.data);
           })
           .catch((err) => {
             console.log(err);
           });
       });
-  });
+  },[token]);
 
   //text 
 
 
-  const handleReset = () => {
+  const handleReset = (e) => {
+    e.preventDefault();
     reset();
   };
+
+
 
   return (
     <>
@@ -75,22 +100,29 @@ function App() {
        
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Coding Challenge</h1>
-      <label htmlFor="First Name"></label>
-      <input placeholder="First Name" {...register("username")} />
+      <label htmlFor="firstName"></label>
+      <input placeholder="First Name" {...register("firstName", { required: true })} />
+      {errors.firstName && <span style={{ color: "red" }}>This field is required</span>}
 
       <label htmlFor="lastName"></label>
-      <input placeholder="Last Name" {...register("lastName")} />
+      <input placeholder="Last Name" {...register("lastName", { required: true })} />
+      {errors.lastName && <span style={{ color: "red" }}>This field is required</span>}
 
       <label htmlFor="address"></label>
-      <input placeholder="Address" {...register("address")} />
+      <input placeholder="Address" {...register("address", { required: true })} />
+      {errors.address && <span style={{ color: "red" }}>This field is required</span>}
 
       <label htmlFor="ssn"></label>
-      <input placeholder="SSN" {...register("ssn")} />
+      <input placeholder="SSN" {...register("ssn", { required: true })} />
+      {errors.ssn && <span style={{ color: "red" }}>This field is required</span>}
 
-      <div style={{ color: "red" }}>
+      {recordInserted? <span style={{color: "#00ff43"}}>record inserted successfully.</span> : null}
+
+{/*       <div style={{ color: "red" }}>
         {Object.keys(errors).length > 0 &&
           "There are errors, check your console."}
-      </div>
+      </div> */}
+
       <div className="btn-submit">
         <input type="submit" value="RESET" onClick={handleReset} />
         <input type="submit" value="SAVE" />
