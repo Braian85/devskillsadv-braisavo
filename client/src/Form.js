@@ -3,11 +3,17 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import "./styles.css";
 
-function Form({token}) {
- 
+function Form({ token }) {
   const [recordInserted, setRecordInserted] = useState(false);
+  const [validation, setValidation] = useState({
+    firstname: 0,
+    lastname: 0,
+    address: 0,
+    ssn: 0,
+  });
   console.log("token", token);
- 
+  console.log("validation: ", validation);
+
   const popInsertedRecordMessage = () => {
     setRecordInserted(true);
     setTimeout(() => {
@@ -20,11 +26,12 @@ function Form({token}) {
     handleSubmit,
     formState: { errors },
     reset,
+    formState,
   } = useForm();
 
   const onSubmit = async (data) => {
     console.log("data: ", data);
-  
+
     const url = "http://localhost:8081/api/members";
     let config = {
       headers: {
@@ -49,23 +56,76 @@ function Form({token}) {
     reset();
   };
 
+  const handleFormValidation = (e) => {
+    e.preventDefault();
+    let regEx = null;
+    switch (e.target.id) {
+      case "1":
+        regEx = /\w\w+/gi;
+        if (regEx.test(e.target.value)) {
+          console.log("validate First Name");
+          setValidation({ ...validation, firstname: 1 });
+        } else {
+          setValidation({ ...validation, firstname: 0 });
+        }
+        break;
+      case "2":
+        regEx = /\w\w+/gi; //two or more word characters
+        if (regEx.test(e.target.value)) {
+          console.log("validate Lastname Name");
+          setValidation({ ...validation, lastname: 1 });
+        } else {
+          setValidation({ ...validation, lastname: 0 });
+        }
+        break;
+
+      case "3":
+        regEx = /\w\w+/gi; //two or more word characters
+        if (regEx.test(e.target.value)) {
+          console.log("validate Address");
+          setValidation({ ...validation, address: 1 });
+        } else {
+          setValidation({ ...validation, address: 0 });
+        }
+        break;
+      case "4":
+        regEx = /^\d{3}-\d{2}-\d{4}$/;
+        if (regEx.test(e.target.value)) {
+          console.log("validate SSN");
+          setValidation({ ...validation, ssn: 1 });
+        } else {
+          setValidation({ ...validation, ssn: 0 });
+        }
+
+        break;
+      default:
+        //
+        break;
+    }
+  };
+ 
   return (
     <>
-       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Coding Challenge</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1>HOME</h1>
         <label htmlFor="firstName">First Name</label>
+
         <input
+          id="1"
           placeholder="John"
           {...register("firstName", { required: true })}
+          onChange={handleFormValidation}
         />
         {errors.firstName && (
           <span style={{ color: "red" }}>This field is required</span>
         )}
-
+       
         <label htmlFor="lastName">Last Name</label>
         <input
+          id="2"
           placeholder="Doe"
           {...register("lastName", { required: true })}
+          onChange={handleFormValidation}
         />
         {errors.lastName && (
           <span style={{ color: "red" }}>This field is required</span>
@@ -73,8 +133,10 @@ function Form({token}) {
 
         <label htmlFor="address">Address</label>
         <input
+          id="3"
           placeholder="Mulholland Drive 23"
           {...register("address", { required: true })}
+          onChange={handleFormValidation}
         />
         {errors.address && (
           <span style={{ color: "red" }}>This field is required</span>
@@ -82,9 +144,11 @@ function Form({token}) {
 
         <label htmlFor="ssn">ssn</label>
         <input
+        id = "4"
           placeholder="333-22-4444"
-          pattern="^\d{3}-\d{2}-\d{4}$"
+          
           {...register("ssn", { required: true })}
+          onChange={handleFormValidation}
         />
         {errors.ssn && (
           <span style={{ color: "red" }}>This field is required</span>
@@ -96,7 +160,7 @@ function Form({token}) {
           </span>
         ) : null}
 
-{/*         {Object.keys(errors).length !== 0 ? (
+        {/*         {Object.keys(errors).length !== 0 ? (
           <div style={{ color: "green" }}>OK</div>
         ) : (
           <div style={{ color: "red" }}>Check validation.</div>
@@ -104,7 +168,15 @@ function Form({token}) {
 
         <div className="btn-submit">
           <input type="submit" value="RESET" onClick={handleReset} />
-          <input type="submit" value="SAVE" />
+          <input
+            type="submit"
+            value="SAVE"
+            disabled={
+              validation.firstname === 1 && validation.lastname === 1 && validation.address === 1 && validation.ssn === 1
+                ? false
+                : true
+            }
+          />
         </div>
       </form>
     </>

@@ -16,10 +16,9 @@ export default function Maincontainer() {
     axios
       .post("http://localhost:8081/auth", {
         username: "sarah",
-        password: "connor",
+        password: "connor", //In production this object will be in an environment variable.
       })
       .then((res) => {
-        // console.log(res);
         setToken(res.data.token);
       })
       .catch((err) => {
@@ -64,7 +63,7 @@ export default function Maincontainer() {
           DATA
         </button>
       </div>
-      {page === "page 1" && <Form token={token}/>}
+      {page === "page 1" && <Form token={token} />}
       {page === "page 2" && <TableContainer data={data} />}
     </>
   );

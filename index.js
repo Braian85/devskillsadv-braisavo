@@ -19,7 +19,7 @@ const cors = corsMiddleware({
 server.pre(cors.preflight)
 server.use(cors.actual)
 
-server.use(morgan('short'));
+server.use(morgan());
 
 server.use(Restify.plugins.queryParser())
 server.use(Restify.plugins.bodyParser({ mapParams: false }))
