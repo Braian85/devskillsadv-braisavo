@@ -61,17 +61,18 @@ function App() {
 
   //text 
 
-  
+
   const handleReset = () => {
     reset();
   };
 
   return (
     <>
-    <nav className="nav">
-      <a>link 1</a>
-      <a>link 2</a>
-    </nav>
+      <div className="btn-container">
+      <button className="btn-nav">HOME</button>
+      <button className="btn-nav">DATA</button>
+      </div>
+       
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Coding Challenge</h1>
       <label htmlFor="First Name"></label>
