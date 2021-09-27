@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Form from "./Form";
 import TableContainer from "./TableContainer";
 import axios from "axios";
+import env from "react-dotenv";
 
 export default function Maincontainer() {
   //Hooks
@@ -9,36 +10,40 @@ export default function Maincontainer() {
   const [token, setToken] = useState({});
   const [data, setData] = useState([]);
 
-  //Token authentication and data request.
+   useEffect( () => {
+
+     axios.post(env.REACT_APP_API_URL+"/auth", {
+      username: "sarah",
+      password: "connor", //In production this object will be in an environment variable.
+    })
+    .then((res) => {
+       setToken(res.data.token);
+           
+    })
+ 
+  }) 
+ 
   useEffect(() => {
-    axios
-      .post("http://localhost:8081/auth", {
-        username: "sarah",
-        password: "connor", //In production this object will be in an environment variable.
-      })
-      .then((res) => {
-        setToken(res.data.token);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        let config = {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        };
-        axios
-          .get("http://localhost:8081/api/members", config)
-          .then((response) => {
-            console.log(response.data);
-            setData(response.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-  }, [token]);
+    
+      let config = {
+         headers: {
+           Authorization: "Bearer " + token,
+         },
+       };
+       
+       if(token.length > 10) {
+         axios.get(env.REACT_APP_API_URL + "/api/members", config)
+           .then((response) => {
+              setData(response.data);
+           })
+           .catch((err) => {
+             console.error(err);
+           }) 
+
+
+       }
+    
+  },[token])
 
   const handlePage = (e) => {
     e.preventDefault();
@@ -60,9 +65,10 @@ export default function Maincontainer() {
         <button id="2" className="btn-nav" onClick={handlePage}>
           DATA
         </button>
-      </div>
-      {page === "page 1" && <Form token={token} mainData={data} />}
+     </div>
+      {page === "page 1" && <Form token={token} setData={setData} mainData = {data} />}
       {page === "page 2" && <TableContainer data={data} />}
+  
     </>
   );
 }

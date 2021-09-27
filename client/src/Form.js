@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import "./styles.css";
+import env from "react-dotenv";
 
-function Form({ token, mainData }) {
+function Form({ token, setData, mainData }) {
   const [recordInserted, setRecordInserted] = useState(false);
   const [SsnNotExist, setSsnNotExist] = useState(false);
   const [validation, setValidation] = useState({
@@ -23,7 +24,7 @@ function Form({ token, mainData }) {
   const popNotExistMessage = () => {
     setSsnNotExist(true);
     setTimeout(() => {
-    setSsnNotExist(false);
+      setSsnNotExist(false);
     }, 3000);
   };
 
@@ -34,48 +35,41 @@ function Form({ token, mainData }) {
     reset,
   } = useForm();
 
-
   const checkSsnExists = (data, ssn) => {
+    console.log("DATA ES: ", data);
+    console.log("SSN ES: ", ssn);
+    const ssns = data.map((e) => e.ssn);
 
-    console.log("DATA ES: ", data)
-    console.log("SSN ES: ", ssn)
-    const values = data.map(e => e.ssn)
-
-    if(values.indexOf(ssn) !== -1) { 
-      return true } else { 
-      return false 
+    if (ssns.indexOf(ssn) !== -1) {
+      return true;
+    } else {
+      return false;
     }
-     
-    
-  }
+  };
 
   const onSubmit = async (data) => {
-    const url = "http://localhost:8081/api/members";
+        
+    const url = env.REACT_APP_API_URL + "/api/members";
     let config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    
-    if(!checkSsnExists(mainData, data.ssn)) {
-  
-    await axios
-      .post(url, data, config)
-      .then((res) => console.log(res))
-      .then(() => popInsertedRecordMessage())
-      .catch((err) => console.log("post error: ", err))
-      .finally(() => {
-        mainData.push(data);
-        reset();
-      });
 
-    }
-    else {
+    if (!checkSsnExists(mainData, data.ssn)) {
+      await axios
+        .post(url, data, config)
+        .then((res) => console.log(res))
+        .then(() => popInsertedRecordMessage())
+        .then(() => {
+          setData([...mainData, data])
+        })
+        .catch((err) => console.log("post error: ", err))
+       
+    } else {
       popNotExistMessage();
       reset();
     }
-
-
   };
 
   const handleReset = (e) => {
@@ -87,7 +81,7 @@ function Form({ token, mainData }) {
     e.preventDefault();
     let regEx = null;
     switch (e.target.id) {
-      case "1":
+      case "firstNameId":
         regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
           setValidation({ ...validation, firstname: 1 });
@@ -95,7 +89,7 @@ function Form({ token, mainData }) {
           setValidation({ ...validation, firstname: 0 });
         }
         break;
-      case "2":
+      case "lastNameId":
         regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
           setValidation({ ...validation, lastname: 1 });
@@ -104,7 +98,7 @@ function Form({ token, mainData }) {
         }
         break;
 
-      case "3":
+      case "addressId":
         regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
           setValidation({ ...validation, address: 1 });
@@ -112,7 +106,7 @@ function Form({ token, mainData }) {
           setValidation({ ...validation, address: 0 });
         }
         break;
-      case "4":
+      case "ssnId":
         regEx = /^\d{3}-\d{2}-\d{4}$/; //ssn format validation.
         if (regEx.test(e.target.value)) {
           setValidation({ ...validation, ssn: 1 });
@@ -134,7 +128,7 @@ function Form({ token, mainData }) {
         <label htmlFor="firstName">First Name</label>
 
         <input
-          id="1"
+          id="firstNameId"
           placeholder="John"
           {...register("firstName", { required: true })}
           onChange={handleFormValidation}
@@ -145,7 +139,7 @@ function Form({ token, mainData }) {
 
         <label htmlFor="lastName">Last Name</label>
         <input
-          id="2"
+          id="lastNameId"
           placeholder="Doe"
           {...register("lastName", { required: true })}
           onChange={handleFormValidation}
@@ -156,7 +150,7 @@ function Form({ token, mainData }) {
 
         <label htmlFor="address">Address</label>
         <input
-          id="3"
+          id="addressId"
           placeholder="Mulholland Drive 23"
           {...register("address", { required: true })}
           onChange={handleFormValidation}
@@ -167,7 +161,7 @@ function Form({ token, mainData }) {
 
         <label htmlFor="ssn">ssn</label>
         <input
-          id="4"
+          id="ssnId"
           placeholder="xxx-xx-xxxx"
           {...register("ssn", { required: true })}
           onChange={handleFormValidation}
@@ -183,9 +177,7 @@ function Form({ token, mainData }) {
         ) : null}
 
         {SsnNotExist ? (
-          <span style={{ color: "#ff0000" }}>
-            The SSN already exists.
-          </span>
+          <span style={{ color: "#ff0000" }}>The SSN already exists.</span>
         ) : null}
 
         {/*         {Object.keys(errors).length !== 0 ? (
@@ -200,10 +192,10 @@ function Form({ token, mainData }) {
             type="submit"
             value="SAVE"
             disabled={
-              validation.firstname === 1 &&
-              validation.lastname === 1 &&
-              validation.address === 1 &&
-              validation.ssn === 1
+              validation.firstname &&
+              validation.lastname &&
+              validation.address &&
+              validation.ssn
                 ? false
                 : true
             }

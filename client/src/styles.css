@@ -188,3 +188,8 @@ button {
     border-bottom: 1px solid rgb(79, 98, 148);
   }
   
+  .container {
+    display: flex; 
+    justify-content: center; 
+
+  }

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Table from './Table';
 
+//This should go to css style sheet for cohesion. Not enough time to implement it. 
 const Styles = styled.div`
   padding: 1rem;
 
@@ -39,8 +40,8 @@ function TableContainer({data}) {
 
     console.log("TableContainer");
     console.log("data prop: ", data);
-    const columns = React.useMemo(
-      () => [
+    const columns =/*  React.useMemo(
+      () => */ [
         
             {
               Header: 'First Name',
@@ -62,12 +63,12 @@ function TableContainer({data}) {
               accessor: 'ssn',
               width: 200,
             },
-          ],
+          ]/* ,
               
       []
-    )
+    ) */
   
-     const dataSet = React.useMemo(() => data, [])
+    //  const dataSet = React.useMemo(() => data, [])
 /*     const data = [
         {
             firstname: "John",
@@ -80,7 +81,7 @@ function TableContainer({data}) {
   
     return (
       <Styles>
-        <Table columns={columns} data={dataSet} />
+        <Table columns={columns} data={data} />
       </Styles>
     )
   }

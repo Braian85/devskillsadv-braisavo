@@ -30,6 +30,7 @@ export default function Table({ columns, data }) {
 
   // Render the UI for your table
   return (
+    <div className="container"> 
     <div {...getTableProps()} className="table">
       <div>
         {headerGroups.map(headerGroup => (
@@ -60,6 +61,7 @@ export default function Table({ columns, data }) {
             )}
         )}
       </div>
+    </div>
     </div>
   )
 }
