@@ -1,8 +1,8 @@
 # Pasos para correr el programa:  
 
-1) Clonar el proyecto.\
-2) Correr "npm install" en el root y en carpeta client. \
-3) Crear archivo .env en root folder con variable REACT_APP_API_URL=http://localhost:8081\
+1) Clonar el proyecto.
+2) Correr "npm install" en el root y en carpeta client. 
+3) Crear archivo .env en root folder con variable REACT_APP_API_URL=http://localhost:8081
 4) Correr "npm run serve" en carpeta root y "npm start" en carpeta client en consolas diferentes. 
 
 # Consideraciones: 
