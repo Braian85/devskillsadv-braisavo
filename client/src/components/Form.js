@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import "./styles.css";
+import "../styles/styles.css";
 import env from "react-dotenv";
 
 function Form({ token, setData, mainData }) {
