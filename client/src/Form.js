@@ -65,6 +65,7 @@ function Form({ token, mainData }) {
       .then(() => popInsertedRecordMessage())
       .catch((err) => console.log("post error: ", err))
       .finally(() => {
+        mainData.push(data);
         reset();
       });
 
