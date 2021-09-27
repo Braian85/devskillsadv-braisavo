@@ -1,18 +1,3 @@
-# Pasos para correr el programa:  
-
-1) Clonar el proyecto.
-2) Correr "npm install" en el root y en carpeta client. 
-3) Crear archivo .env en root folder con variable REACT_APP_API_URL=http://localhost:8081
-4) Correr "npm run serve" en carpeta root y "npm start" en carpeta client en consolas diferentes. 
-
-# Consideraciones: 
-
-El proyecto fue creado con create-react-app. 
-Se utilizó react-hook-form para el formulario.
-Se utilizó react-table para la tabla de datos.
-Se implementaron expresiones regulares para la validación. 
-
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
