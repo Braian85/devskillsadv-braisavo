@@ -8,10 +8,10 @@ function Form({ token, setData, mainData }) {
   const [recordInserted, setRecordInserted] = useState(false);
   const [SsnNotExist, setSsnNotExist] = useState(false);
   const [validation, setValidation] = useState({
-    firstname: 0,
-    lastname: 0,
-    address: 0,
-    ssn: 0,
+    firstname: false,
+    lastname: false,
+    address: false,
+    ssn: false,
   });
 
   const popInsertedRecordMessage = () => {
@@ -36,10 +36,7 @@ function Form({ token, setData, mainData }) {
   } = useForm();
 
   const checkSsnExists = (data, ssn) => {
-    console.log("DATA ES: ", data);
-    console.log("SSN ES: ", ssn);
     const ssns = data.map((e) => e.ssn);
-
     if (ssns.indexOf(ssn) !== -1) {
       return true;
     } else {
@@ -48,7 +45,6 @@ function Form({ token, setData, mainData }) {
   };
 
   const onSubmit = async (data) => {
-        
     const url = env.REACT_APP_API_URL + "/api/members";
     let config = {
       headers: {
@@ -62,10 +58,9 @@ function Form({ token, setData, mainData }) {
         .then((res) => console.log(res))
         .then(() => popInsertedRecordMessage())
         .then(() => {
-          setData([...mainData, data])
+          setData([...mainData, data]);
         })
-        .catch((err) => console.log("post error: ", err))
-       
+        .catch((err) => console.log("post error: ", err));
     } else {
       popNotExistMessage();
       reset();
@@ -84,39 +79,38 @@ function Form({ token, setData, mainData }) {
       case "firstNameId":
         regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
-          setValidation({ ...validation, firstname: 1 });
+          setValidation({ ...validation, firstname: true });
         } else {
-          setValidation({ ...validation, firstname: 0 });
+          setValidation({ ...validation, firstname: false });
         }
         break;
       case "lastNameId":
         regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
-          setValidation({ ...validation, lastname: 1 });
+          setValidation({ ...validation, lastname: true });
         } else {
-          setValidation({ ...validation, lastname: 0 });
+          setValidation({ ...validation, lastname: false });
         }
         break;
 
       case "addressId":
         regEx = /\w\w+/gi; //two or more word characters validation.
         if (regEx.test(e.target.value)) {
-          setValidation({ ...validation, address: 1 });
+          setValidation({ ...validation, address: true });
         } else {
-          setValidation({ ...validation, address: 0 });
+          setValidation({ ...validation, address: false });
         }
         break;
       case "ssnId":
         regEx = /^\d{3}-\d{2}-\d{4}$/; //ssn format validation.
         if (regEx.test(e.target.value)) {
-          setValidation({ ...validation, ssn: 1 });
+          setValidation({ ...validation, ssn: true });
         } else {
-          setValidation({ ...validation, ssn: 0 });
+          setValidation({ ...validation, ssn: false });
         }
 
         break;
       default:
-        //
         break;
     }
   };
@@ -179,12 +173,6 @@ function Form({ token, setData, mainData }) {
         {SsnNotExist ? (
           <span style={{ color: "#ff0000" }}>The SSN already exists.</span>
         ) : null}
-
-        {/*         {Object.keys(errors).length !== 0 ? (
-          <div style={{ color: "green" }}>OK</div>
-        ) : (
-          <div style={{ color: "red" }}>Check validation.</div>
-        )} */}
 
         <div className="btn-submit">
           <input type="submit" value="RESET" onClick={handleReset} />

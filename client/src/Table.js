@@ -1,10 +1,6 @@
 import React from 'react'
 import { useTable, useBlockLayout } from 'react-table'
-
-// import makeData from './makeData'
-
 export default function Table({ columns, data }) {
-  // Use the state and functions returned from useTable to build your UI
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -28,7 +24,6 @@ export default function Table({ columns, data }) {
     useBlockLayout
   )
 
-  // Render the UI for your table
   return (
     <div className="container"> 
     <div {...getTableProps()} className="table">
