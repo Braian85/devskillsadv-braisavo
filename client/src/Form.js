@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import "./styles.css";
 
-function Form({ token }) {
+function Form({ token, mainData }) {
   const [recordInserted, setRecordInserted] = useState(false);
+  const [SsnNotExist, setSsnNotExist] = useState(false);
   const [validation, setValidation] = useState({
     firstname: 0,
     lastname: 0,
@@ -19,12 +20,34 @@ function Form({ token }) {
     }, 3000);
   };
 
+  const popNotExistMessage = () => {
+    setSsnNotExist(true);
+    setTimeout(() => {
+    setSsnNotExist(false);
+    }, 3000);
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
+
+  const checkSsnExists = (data, ssn) => {
+
+    console.log("DATA ES: ", data)
+    console.log("SSN ES: ", ssn)
+    const values = data.map(e => e.ssn)
+
+    if(values.indexOf(ssn) !== -1) { 
+      return true } else { 
+      return false 
+    }
+     
+    
+  }
 
   const onSubmit = async (data) => {
     const url = "http://localhost:8081/api/members";
@@ -33,6 +56,9 @@ function Form({ token }) {
         Authorization: `Bearer ${token}`,
       },
     };
+    
+    if(!checkSsnExists(mainData, data.ssn)) {
+  
     await axios
       .post(url, data, config)
       .then((res) => console.log(res))
@@ -41,6 +67,14 @@ function Form({ token }) {
       .finally(() => {
         reset();
       });
+
+    }
+    else {
+      popNotExistMessage();
+      reset();
+    }
+
+
   };
 
   const handleReset = (e) => {
@@ -144,6 +178,12 @@ function Form({ token }) {
         {recordInserted ? (
           <span style={{ color: "#00ff43" }}>
             record inserted successfully.
+          </span>
+        ) : null}
+
+        {SsnNotExist ? (
+          <span style={{ color: "#ff0000" }}>
+            The SSN already exists.
           </span>
         ) : null}
 

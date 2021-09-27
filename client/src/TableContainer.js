@@ -75,16 +75,7 @@ function TableContainer({data}) {
             address: "Congo", 
             ssn: "333-22-4444"
         
-    },
-    {
-        firstname: "Daniel",
-        lastname: "Nuske",
-        address: "Pilar 1234", 
-        ssn: "333-22-4444"
-    
-}
-
-
+    }
     ]; */
   
     return (

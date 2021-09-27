@@ -61,7 +61,7 @@ export default function Maincontainer() {
           DATA
         </button>
       </div>
-      {page === "page 1" && <Form token={token} />}
+      {page === "page 1" && <Form token={token} mainData={data} />}
       {page === "page 2" && <TableContainer data={data} />}
     </>
   );
